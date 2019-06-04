@@ -65,7 +65,6 @@ class Reservation(models.Model):
     time = models.TimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     notes = models.TextField(blank=True)
-    # frequent_customers = []
 
     def __str__(self):
         return "{} {} - party of {}".format(self.date, self.time, self.party_size)
@@ -75,17 +74,3 @@ class Reservation(models.Model):
         time = self.time.strftime("%H:%M")
         return "{} {}".format(date, time)
     
-    # def add_frequent_customers(self):
-    #     now = datetime.now()        
-    #     six_months = datetime.now() - timedelta(days=180)
-    #     visits = len(user.reservations_made.filter(range(now, six_months))
-        
-    #     if visits >= 3:
-    #         frequent_customers.append(user)
-
-
-
-        # if user.reservations_made >= 3 in (time <= datetime.now() and time >= (datetime.now() - timedelta(days=180))) or user.reservations_made >= 8:
-        # between time delta now and time delta - 6 months:
-        # then display as frequent customer
-

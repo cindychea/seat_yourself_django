@@ -5,7 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
 from restaurants.forms import LoginForm, ProfileForm, ReservationForm, RestaurantForm
-from restaurants.models import Category, Profile, Restaurant
+from restaurants.models import Category, Profile, Restaurant, Reservation
+from datetime import datetime, timedelta
 
 def restaurants_list(request):
     restaurants = Restaurant.objects.all()
@@ -15,7 +16,19 @@ def restaurants_list(request):
 def restaurant_show(request, id):
     restaurant = Restaurant.objects.get(pk=id)
     restaurants = Restaurant.objects.filter(owner=restaurant.owner)
-    context = {'restaurant': restaurant, 'restaurants': restaurants, 'title': restaurant.name}
+    vip_users = []
+
+    all_resos = restaurant.reservations.all()
+    for reservation in all_resos: 
+        new_user = reservation.user
+        total_visits = Reservation.objects.filter(user = new_user, restaurant = restaurant).count()
+        visits_in_six = Reservation.objects.filter(user = new_user, restaurant = restaurant).filter(date__gte=datetime.now() - timedelta(180)).count()
+        if visits_in_six > 2 or total_visits > 7:
+            vip_users.append(new_user)
+        # else:
+        #     new_user.vip_user = False
+
+    context = {'restaurant': restaurant, 'restaurants': restaurants, 'title': restaurant.name, 'all_resos': all_resos, 'vip_users': vip_users}
     if request.user.is_authenticated:
         context['reservations'] = restaurant.reservations.filter(user=request.user)
         context['reservation_form'] = ReservationForm()
@@ -136,3 +149,42 @@ def search(request):
     }
     response = render(request, 'search.html', context)
     return HttpResponse(response)
+
+
+
+
+# @login_required
+# def frequent_customer(request, id):
+#     restaurant = Restaurant.objects.get(pk=id)
+#     if restaurant.owner == request.user:
+#         total_reservations = restaurant.reservations.all()
+#         for reservation in total_reservations:
+#             new_user = reservation.user
+#             no_of_total_visits = Reservation.objects.filter(user = new_user, restaurant = restaurant).count()
+#             visits_in_last_6 = Reservation.objects.filter(user = new_user, restaurant = restaurant).filter(date__gte= datetime.now() - timedelta(180)).count()
+#             if no_of_total_visits > 7 or visits_in_last_6 > 2:
+#                 new_user.vip_user = True
+#             else:
+#                 new_user.vip_user = False
+#         context = {'reservations': total_reservations}
+#         return render(request, 'restaurant_show', context)
+#     else:
+#         return redirect(reverse('restaurant_show', args=[restaurant.pk]))
+
+# @login_required
+# def frequent_customer(request, id):
+#     restaurant = Restaurant.objects.get(pk=id)
+#     if restaurant.owner == request.user:
+#         z_reservations = restaurant.reservations.all()
+#         for reservation in z_reservations:
+#             new_user = reservation.user
+#             no_of_total_visits = Reservation.objects.filter(user = new_user, restaurant = restaurant).count()
+#             visits_in_last_6 = Reservation.objects.filter(user = new_user, restaurant = restaurant).filter(date__gte= datetime.now() - timedelta(180)).count()
+#             if no_of_total_visits > 7 or visits_in_last_6 > 2:
+#                 new_user.vip_user = True
+#             else:
+#                 new_user.vip_user = False
+#         context = {'reservations': z_reservations}
+#         return render(request, 'reservations.html', context)
+#     else:
+#         return redirect(reverse('restaurant_show', args=[restaurant.pk]))
