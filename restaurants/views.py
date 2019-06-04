@@ -14,7 +14,7 @@ def restaurants_list(request):
 
 def restaurant_show(request, id):
     restaurant = Restaurant.objects.get(pk=id)
-    restaurants = Restaurant.objects.all()
+    restaurants = Restaurant.objects.filter(owner=restaurant.owner)
     context = {'restaurant': restaurant, 'restaurants': restaurants, 'title': restaurant.name}
     if request.user.is_authenticated:
         context['reservations'] = restaurant.reservations.filter(user=request.user)

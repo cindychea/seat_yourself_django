@@ -10,9 +10,7 @@
     <h4>Other restaurants by this owner:</h4>
     <ul>
       {% for restaurant in restaurants %}
-        {% if restaurant.owner == %}
-          <li>{{ restaurant.name }}</li>
-        {% endif %}
+          <li><a href="{% url 'restaurant_show' id=restaurant.pk %}">{{ restaurant.name }}</a></li>
       {% endfor %}
     </ul>
 
