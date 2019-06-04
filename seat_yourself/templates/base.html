@@ -14,10 +14,20 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
   </head>
   <body>
+
     <header>
       <h1><a href="{% url 'home' %}">Seat Yourself</a></h1>
       {% include '_nav.html' %}
     </header>
+
+    <form action="{% url 'search' %}" method="get">
+      <label for="restaurant-search">
+          <span>Find a Restaurant:</span>
+          <input type="search" id="restaurant-search" name="query" value="{{ query }}"/>
+      </label>
+      <input type="submit" value="Search"/>
+    </form>
+    
     {% block content %}
     {% endblock %}
     <footer> Copyright Bitmaker Labs </footer>

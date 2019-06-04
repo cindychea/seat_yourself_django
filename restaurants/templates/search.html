@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="search-header">Search Results: 
+  <span>{{ restaurants.count }}</span>
+</h2>
+<main class="search-container">
+    <ul>
+      {% for restaurant in restaurants %}
+        <li>
+          <div class="search-rest-container">
+            <a href="{% url 'restaurant_show' id=restaurant.pk %}">
+              {{ restaurant.name }}
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </main>
+{% endblock %}

@@ -7,6 +7,14 @@
     <h3>{{ restaurant.address }}</h3>
     <h3>{{ restaurant.phone }}</h3>
     <h3>{{ restaurant.opening_time }} to {{ restaurant.closing_time }}</h3>
+    <h4>Other restaurants by this owner:</h4>
+    <ul>
+      {% for restaurant in restaurants %}
+        {% if restaurant.owner == %}
+          <li>{{ restaurant.name }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
 
     {% if user.is_authenticated %}
       {% if restaurant.owner == user %}

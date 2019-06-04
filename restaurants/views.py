@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -13,7 +14,8 @@ def restaurants_list(request):
 
 def restaurant_show(request, id):
     restaurant = Restaurant.objects.get(pk=id)
-    context = {'restaurant': restaurant, 'title': restaurant.name}
+    restaurants = Restaurant.objects.all()
+    context = {'restaurant': restaurant, 'restaurants': restaurants, 'title': restaurant.name}
     if request.user.is_authenticated:
         context['reservations'] = restaurant.reservations.filter(user=request.user)
         context['reservation_form'] = ReservationForm()
@@ -123,3 +125,14 @@ def signup(request):
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
+
+
+def search(request):
+    query = request.GET['query']
+    search_results = Restaurant.objects.filter(name__icontains=query)
+    context = {
+        'restaurants': search_results,
+        'query': query
+    }
+    response = render(request, 'search.html', context)
+    return HttpResponse(response)
