@@ -22,16 +22,19 @@ def restaurant_show(request, id):
 @login_required
 def restaurant_edit(request, id):
     restaurant = Restaurant.objects.get(pk=id)
-    if request.method == 'POST':
-        form = RestaurantForm(request.POST, instance=restaurant)
-        if form.is_valid():
-            resto = form.save()
-            return redirect(reverse('restaurant_show', args=[restaurant.pk]))
+    if request.user == restaurant.owner:
+        if request.method == 'POST':
+            form = RestaurantForm(request.POST, instance=restaurant)
+            if form.is_valid():
+                resto = form.save()
+                return redirect(reverse('restaurant_show', args=[restaurant.pk]))
+        else:
+            form = RestaurantForm(instance=restaurant)
+            title = "Edit {}".format(restaurant.name)
+            context = {'restaurant': restaurant, 'form': form, 'title': title}
+            return render(request, 'restaurant_edit.html', context)
     else:
-        form = RestaurantForm(instance=restaurant)
-        title = "Edit {}".format(restaurant.name)
-        context = {'restaurant': restaurant, 'form': form, 'title': title}
-        return render(request, 'restaurant_edit.html', context)
+        return redirect('restaurant_show', id=id)
 
 def categories_list(request):
     categories = Category.objects.all()

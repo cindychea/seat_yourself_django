@@ -25,9 +25,10 @@
           </ol>
         {% else %}
           <p>No upcoming reservations</p>
-        {% endif %}
       {% endif %}
-
+    {% endif %}
+      
+      {% if restaurant.owner != user %}
       {% if reservations %}
       <ol>
         {% for reservation in reservations %}
@@ -40,6 +41,7 @@
         </li>
         {% endfor %}
       </ol>
+      {% endif %}
       {% endif %}
       <form method='POST' action="{% url 'reservation_create' restaurant_id=restaurant.pk%}">
         {% csrf_token %}

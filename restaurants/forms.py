@@ -1,16 +1,14 @@
 import datetime as dt
 from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
-from django.forms import (CharField, DateField, DateInput,
-     EmailField, Form, IntegerField, ModelChoiceField, ModelForm,
-     PasswordInput, Textarea, TimeField, TimeInput, URLField)
+from django.forms import (CharField, DateField, DateInput, EmailField, Form, IntegerField, ModelChoiceField, ModelForm, PasswordInput, Textarea, TimeField, TimeInput, URLField)
 from restaurants.models import Category, Profile, Reservation, Restaurant
 
 class ReservationForm(ModelForm):
     party_size = IntegerField()
     notes = CharField(required=False, widget=Textarea())
-    time = TimeField(widget=TimeInput(attrs={'type': 'time' }))
-    date = DateField(widget=DateInput(attrs={'type': 'date', 'min': dt.date.today() }))
+    time = TimeField(widget=TimeInput(attrs={'type': 'time'}))
+    date = DateField(widget=DateInput(attrs={'type': 'date', 'min': dt.date.today()}))
 
     class Meta:
         model = Reservation
