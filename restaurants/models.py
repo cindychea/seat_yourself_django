@@ -44,6 +44,7 @@ class Restaurant(models.Model):
     description = models.TextField(null=True)
     opening_time = models.TimeField()
     closing_time = models.TimeField()
+    final_reservation = models.TimeField()
 
     def __str__(self):
         return self.name
@@ -64,6 +65,7 @@ class Reservation(models.Model):
     time = models.TimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     notes = models.TextField(blank=True)
+    frequent_customers = []
 
     def __str__(self):
         return "{} {} - party of {}".format(self.date, self.time, self.party_size)
@@ -72,4 +74,9 @@ class Reservation(models.Model):
         date = self.date.strftime("%Y-%m-%d")
         time = self.time.strftime("%H:%M")
         return "{} {}".format(date, time)
-
+    
+    def frequent_customers(self):
+        if reservations_made >= 3 or reservations_made >= 8:
+        # between time delta now and time delta - 6 months:
+        # then display as frequent customer
+            pass
