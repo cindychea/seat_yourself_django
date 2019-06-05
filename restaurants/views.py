@@ -92,10 +92,6 @@ def logout_view(request):
 
 @login_required
 def profile(request):
-    # vip_users
-    # if request.user is
-
-
     context = {'title': 'Profile'}
     if not Profile.exists_for_user(request.user):
         form = ProfileForm()

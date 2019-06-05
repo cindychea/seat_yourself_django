@@ -20,6 +20,15 @@ class Profile(models.Model):
     def exists_for_user(self, user):
         return Profile.objects.filter(user_id=user.id).exists()
 
+    def get_faves(self):
+        fave_restos = []
+        for restaurant in self.user.reserved_restaurants.all():
+            new_fave = restaurant
+            total_visits = self.user.reservations_made.filter(restaurant = new_fave).count()
+            visits_in_six = self.user.reservations_made.filter(restaurant = new_fave).filter(date__gte=datetime.now() - timedelta(180)).count()
+        if visits_in_six > 2 or total_visits > 7:
+            fave_restos.append(new_fave)
+        return set(fave_restos)
 
 class Category(models.Model):
     name = models.CharField(max_length=255)

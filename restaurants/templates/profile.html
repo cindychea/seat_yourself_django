@@ -11,10 +11,12 @@
         </form>
       </section>
     {% else %}
-    <h3>Favourite Restaurants</h3>
-
-
-      
+    <h3>Favourite Restaurants:</h3>
+      {% for resto in user.profile.get_faves %}
+        <ul>
+          <li>{{ resto.name }}</li>
+        </ul>
+      {% endfor %}
       {% if request.user.reservations_made.exists %}
         <section class='my-reservations'>
           <h3>My reservations</h3>
