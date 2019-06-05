@@ -21,8 +21,8 @@
           <ol>
             {% for reservation in restaurant.reservations.all %}
               <li>
-                <p> <time datetime="{{ reservation.date_and_time }}">{{ reservation.date }} at {{ reservation.time }} </time></p>
-                <p> {% if reservation.user in vip_users %} *VIP* {% endif %}  
+                <p> <time datetime="{{ reservation.date_and_time }}">{{ reservation.date }} at {{ reservation.time }}</time></p>
+                <p> {% if reservation.user in restaurant.get_vip %} *VIP* {% endif %}  
                 {{ reservation.user.profile.last_name }}, party of {{ reservation.party_size }} </p>
                 
                 {% if reservation.notes %}

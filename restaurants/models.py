@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Sum
+from datetime import datetime, timedelta
 
 class Profile(models.Model):
     first_name = models.CharField(max_length=255)
@@ -56,6 +57,17 @@ class Restaurant(models.Model):
         reserved_seats = self.reservations.filter(date=date, time=time).aggregate(Sum('party_size'))
         reserved_seats = reserved_seats['party_size__sum'] or 0
         return (reserved_seats + number_of_people) <= self.capacity
+
+    def get_vip(self):
+        vip_users = []
+        for reservation in self.reservations.all(): 
+            new_user = reservation.user
+            total_visits = self.reservations.filter(user = new_user).count()
+            visits_in_six = self.reservations.filter(user = new_user).filter(date__gte=datetime.now() - timedelta(180)).count()
+            if visits_in_six > 2 or total_visits > 7:
+                vip_users.append(new_user)
+        return set(vip_users)
+
 
 class Reservation(models.Model):
     user = models.ForeignKey(User, related_name='reservations_made', on_delete=models.CASCADE)

@@ -11,6 +11,10 @@
         </form>
       </section>
     {% else %}
+    <h3>Favourite Restaurants</h3>
+
+
+      
       {% if request.user.reservations_made.exists %}
         <section class='my-reservations'>
           <h3>My reservations</h3>
